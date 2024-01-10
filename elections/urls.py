@@ -6,5 +6,5 @@ app_name = 'elections'
 
 urlpatterns = [
     # path('', views.index, name='index'),
-    path('results/', include('results.urls')),
+    path('results/', include('results.urls', namespace='results')),
 ]

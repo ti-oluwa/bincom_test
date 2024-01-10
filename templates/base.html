@@ -15,14 +15,14 @@
     <header>
         <nav class="container">
             <div id="logo">
-                <a href="">Bincom Test</a>
+                <a href="{% url 'elections:results:polling_unit_results' %}">Bincom Test</a>
             </div>
 
             <div id="nav-links">
                 <ul>
-                    <li><a href="">Unit Results</a></li>
-                    <li><a href="">LGA Results</a></li>
-                    <li><a href="">Add Party Result</a></li>
+                    <li><a href="{% url 'elections:results:polling_unit_results' %}">Polling Unit Results</a></li>
+                    <li><a href="{% url 'elections:results:lga_results' %}">LGA Results</a></li>
+                    <li><a href="{% url 'elections:results:store_party_results' %}">Add Party Result</a></li>
                 </ul>
             </div>
 
@@ -34,9 +34,9 @@
 
         <div id="dropdown-nav">
             <ul>
-                <li><a href="">Unit Results</a></li>
-                <li><a href="">LGA Results</a></li>
-                <li><a href="">Add Party Result</a></li>
+                <li><a href="{% url 'elections:results:polling_unit_results' %}">Polling Unit Results</a></li>
+                <li><a href="{% url 'elections:results:lga_results' %}">LGA Results</a></li>
+                <li><a href="{% url 'elections:results:store_party_results' %}">Add Party Result</a></li>
             </ul>
         </div>
     </header>

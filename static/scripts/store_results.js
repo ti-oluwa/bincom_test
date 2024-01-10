@@ -1,12 +1,10 @@
-const resultForm = document.getElementById('result-form');
-const resultFormSubmitButton = resultForm.querySelector('button[type="submit"]');
-const resultTable = document.getElementById('result-table');
-const resultTableBody = resultTable.querySelector('tbody');
-const resultFormSelectFields = resultForm.querySelectorAll('select');
+const addForm = document.getElementById('result-form');
+const addFormNumberField = addForm.querySelector('input[type="number"]');
+const addFormSubmitButton = addForm.querySelector('button[type="submit"]');
+const addFormSelectFields = addForm.querySelectorAll('select');
 
 
 // DIVISION FETCHING 
-
 
 function updateSelectFieldOptionsWithResponseData(nextField, data){
     nextField.querySelectorAll('option').forEach(option => {
@@ -33,7 +31,9 @@ function updateSelectFieldOptionsWithResponseData(nextField, data){
  */
 function fetchAndUpdateNextSelectFieldOptions(field) {
     const nextField = field.parentElement.nextElementSibling.querySelector('select');
-    if (!nextField) return;
+    if (!nextField) {
+        return;
+    }
 
     const siblings = nextField.parentElement.parentElement.querySelectorAll('select');
     siblings.forEach((select, index) => {
@@ -43,7 +43,7 @@ function fetchAndUpdateNextSelectFieldOptions(field) {
     });
 
     const data = {
-        'csrfmiddlewaretoken': resultForm.querySelector('input[name="csrfmiddlewaretoken"]').value,
+        'csrfmiddlewaretoken': addForm.querySelector('input[name="csrfmiddlewaretoken"]').value,
     }
     data['previous'] = {
         'name': field.name,
@@ -54,7 +54,7 @@ function fetchAndUpdateNextSelectFieldOptions(field) {
     }
 
     const options = {
-        method: resultForm.method,
+        method: addForm.method,
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': data.csrfmiddlewaretoken,
@@ -75,72 +75,55 @@ function fetchAndUpdateNextSelectFieldOptions(field) {
 }
 
 
-resultFormSelectFields.forEach((field) => {
+addFormSelectFields.forEach((field) => {
     field.addEventListener('change', () => {
+        if(field.name == 'party') return;
         fetchAndUpdateNextSelectFieldOptions(field);
     });
 });
 
 
-// RESULTING FETCHING
 
-resultForm.onSubmit = () => {
-    resultFormSubmitButton.disabled = true;
-    resultFormSubmitButton.innerHTML = 'Fetching Results...';
-}
+addForm.addEventListener('change', () => {
 
-
-resultForm.onResponse = () => {
-    resultFormSubmitButton.disabled = false;
-    resultFormSubmitButton.innerHTML = 'Fetch Results';
-}
-
-
-/**
- * Add response data to the result table
- * @param {object} data
- * @returns {void}
- */
-function updateResultTableWithResponseData(data) {
-    resultTableBody.querySelectorAll('tr').forEach(row => {
-        if (row.id !== "no-results"){
-            resultTableBody.removeChild(row);
-        }
+    let allFilled = true;
+    addFormSelectFields.forEach((field) => {
+        allFilled = allFilled && field.value;
     });
 
-    data.forEach((result) => {
-        const row = document.createElement('tr');
-        const party = document.createElement('td');
-        const score = document.createElement('td');
+    if (allFilled){
+        addFormNumberField.disabled = false;
+    };
+})
 
-        party.innerHTML = result.party_abbreviation;
-        score.innerHTML = result.party_score;
 
-        row.appendChild(party);
-        row.appendChild(score);
+// SUBMITTING RESULTS
 
-        resultTableBody.appendChild(row);
-    });
-
-    const countDisplayer = resultTable.parentElement.querySelector('#results-count');
-    countDisplayer.innerHTML = data.length;
+addForm.onSubmit = () => {
+    addFormSubmitButton.disabled = true;
+    addFormSubmitButton.innerHTML = 'Adding Result...';
 }
 
 
+addForm.onResponse = () => {
+    addFormSubmitButton.disabled = false;
+    addFormSubmitButton.innerHTML = 'Add Result';
+}
 
-resultForm.addEventListener('submit', (event) => {
+
+addForm.addEventListener('submit', (event) => {
     event.stopImmediatePropagation();
     event.preventDefault();
 
-    const formData = new FormData(resultForm);
+    const formData = new FormData(addForm);
     const data = {};
     for (let [key, value] of formData.entries()) {
         data[key] = value;
     };
 
-    const url = resultForm.action;
+    const url = addForm.action;
     const options = {
-        method: resultForm.method,
+        method: addForm.method,
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': data.csrfmiddlewaretoken,
@@ -148,15 +131,17 @@ resultForm.addEventListener('submit', (event) => {
         body: JSON.stringify(data),
     };
 
-    resultForm.onSubmit();
+    addForm.onSubmit();
     fetch(url, options).then((response) => {
-        resultForm.onResponse();
+        addForm.onResponse();
         if (response.ok) {
             response.json().then((data) => {
-                updateResultTableWithResponseData(data.data.results);
+                alert(data.detail)
             });
         } else {
-            throw new Error('Something went wrong');
+            response.json().then((data) => {
+                alert(data.detail)
+            });
         }
     });
 });

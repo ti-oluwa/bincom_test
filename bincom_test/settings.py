@@ -5,13 +5,13 @@ import djsm
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-manager = djsm.get_djsm(quiet=False)
+# manager = djsm.get_djsm(quiet=False)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = manager.get_or_create_secret_key()
+SECRET_KEY = 'ewrtyguiojwretdfyguioj345678984354678hgrhbfjg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,7 +31,7 @@ INSTALLED_APPS = [
 
     'elections.apps.ElectionsConfig',
     'divisions.apps.DivisionsConfig',
-    'results.apps.ResultsConfig'
+    'results.apps.ResultsConfig',
 ]
 
 MIDDLEWARE = [
