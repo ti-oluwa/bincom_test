@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views import generic
 
-# Create your views here.
+
+class IndexView(generic.RedirectView):
+    url = 'results/polling-unit/'
+
+
+index_view = IndexView.as_view()

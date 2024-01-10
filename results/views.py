@@ -194,7 +194,7 @@ class StorePartyResultsView(ResultsView):
                 status=400
             )
         
-        party = Party.objects.filter(id=int(party_id)).first()
+        party = Party.objects.filter(pk=party_id).first()
         if not party:
             return JsonResponse(
                 data={
