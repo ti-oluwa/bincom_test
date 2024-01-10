@@ -141,6 +141,8 @@ addForm.addEventListener('submit', (event) => {
             response.json().then((data) => {
                 alert(data.detail)
             });
+            addFormNumberField.value = '';
+            
         } else {
             response.json().then((data) => {
                 alert(data.detail)

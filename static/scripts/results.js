@@ -23,7 +23,7 @@ function updateSelectFieldOptionsWithResponseData(nextField, data){
         const option = document.createElement('option');
 
         option.innerHTML = result[`${nextField.name.replace('-', '_')}_name`]
-        option.value = result.pk;
+        option.value = result[`${nextField.name.replace('-', '_')}_id`];
 
         nextField.appendChild(option);
         nextField.disabled = false
@@ -118,7 +118,7 @@ function updateResultTableWithResponseData(data) {
         const score = document.createElement('td');
 
         party.innerHTML = result.party_abbreviation;
-        score.innerHTML = result.party_score;
+        score.innerHTML = result.party_score ?? 'No Score';
 
         row.appendChild(party);
         row.appendChild(score);

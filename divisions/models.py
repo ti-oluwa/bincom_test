@@ -4,7 +4,7 @@ from django.db import models
 class States(models.Model):
     """Model to represent state electoral divisions"""
     state_id = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
-    state_name = models.CharField(max_length=50, unique=True)
+    state_name = models.CharField(max_length=50)
 
     class Meta:
         db_table = 'states'
@@ -20,7 +20,7 @@ class States(models.Model):
 class LGA(models.Model):
     """Model to represent local government electoral divisions"""
     uniqueid = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
-    lga_id = models.CharField(max_length=50, unique=True)
+    lga_id = models.CharField(max_length=50)
     lga_name = models.CharField(max_length=50)
     state_id = models.CharField(max_length=50)
     lga_description = models.TextField(blank=True)
@@ -35,13 +35,13 @@ class LGA(models.Model):
         verbose_name_plural = 'LGAs'
 
     def __str__(self) -> str:
-        return f"({self.lga_id}) {self.lga_name}"
+        return f"({self.uniqueid}) {self.lga_name}"
 
 
 class Ward(models.Model):
     """Model to represent ward electoral divisions"""
     uniqueid = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
-    ward_id = models.CharField(max_length=50, unique=True)
+    ward_id = models.CharField(max_length=50)
     ward_name = models.CharField(max_length=50)
     lga_id = models.CharField(max_length=50)
     ward_description = models.CharField(max_length=50, blank=True)
@@ -56,14 +56,14 @@ class Ward(models.Model):
         verbose_name_plural = 'Wards'
 
     def __str__(self) -> str:
-        return f"({self.ward_id}) {self.ward_name}"
+        return f"({self.uniqueid}) {self.ward_name}"
 
 
 
 class PollingUnit(models.Model):
     """Model to represent polling units"""
     uniqueid = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
-    polling_unit_id = models.CharField(max_length=50, unique=True)
+    polling_unit_id = models.CharField(max_length=50)
     ward_id = models.CharField(max_length=50)
     lga_id = models.CharField(max_length=50, blank=True)
     uniquewardid = models.CharField(max_length=50, null=True, default=None)
@@ -83,7 +83,7 @@ class PollingUnit(models.Model):
         verbose_name_plural = 'Polling units'
 
     def __str__(self) -> str:
-        return f"({self.polling_unit_id}) {self.polling_unit_name}"
+        return f"({self.uniqueid}) {self.polling_unit_name}"
 
 
 # Set settings.USE_TZ = False to avoid errors from DateTimeFields

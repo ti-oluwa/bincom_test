@@ -1,9 +1,7 @@
-from re import L
 from typing import Any
 from django.views import generic
 import json
 from django.http import JsonResponse
-from django.db import models
 
 from divisions.models import States, LGA, Ward, PollingUnit
 from .models import AnnouncedPuResults
@@ -26,18 +24,28 @@ class PollingUnitResultsView(ResultsView):
     def post(self, request, *args, **kwargs):
         """Handle POST request"""
         data: dict = json.loads(request.body.decode())
-        polling_unit_uniqueid = data.get('polling-unit')
+        polling_unit_id = data.get('polling-unit')
 
-        if not polling_unit_uniqueid:
+        if not polling_unit_id:
             return JsonResponse(
                 data={
                     'status': 'error',
-                    'detail': 'Polling unit uniqueid is required'
+                    'detail': 'Polling unit id is required'
                 },
                 status=400
             )
         
-        polling_unit_results = AnnouncedPuResults.objects.filter(polling_unit_uniqueid=polling_unit_uniqueid)
+        polling_unit = PollingUnit.objects.filter(polling_unit_id=polling_unit_id).first()
+        if not polling_unit:
+            return JsonResponse(
+            data={
+                'status': 'error',
+                'detail': f'Polling unit with polling unit id {polling_unit_id} does not exist',
+            },
+            status=404
+        )
+
+        polling_unit_results = AnnouncedPuResults.objects.filter(polling_unit_uniqueid=polling_unit.uniqueid)
         results = polling_unit_results.values('party_abbreviation', 'party_score')
         return JsonResponse(
             data={
@@ -99,8 +107,9 @@ def fetch_next_division_by_previous_division_view(request, *args, **kwargs):
         f'{previous_name}_id': str(previous_value)
     }
 
+
     divisions = NextDivisionModel.objects.filter(**filter_kwargs)
-    results = divisions.values(f'{nxt_name}_name', 'pk')
+    results = divisions.values(f'{nxt_name}_name', f'{nxt_name}_id')
     return JsonResponse(
         data={
             'status': "success",
@@ -130,7 +139,7 @@ class LGAResultsView(ResultsView):
                 },
                 status=400
             )
-        
+
         lga_polling_units = PollingUnit.objects.filter(lga_id=lga_id)
         lga_polling_unit_ids = lga_polling_units.values_list('uniqueid', flat=True)
         lga_polling_units_results = AnnouncedPuResults.objects.filter(polling_unit_uniqueid__in=lga_polling_unit_ids)
@@ -139,10 +148,12 @@ class LGAResultsView(ResultsView):
         results = []
         for party in parties:
             party_lga_polling_units_results = lga_polling_units_results.filter(party_abbreviation=party.partyid)
-            party_lga_score = party_lga_polling_units_results.aggregate(total_score=models.Sum('party_score')).get('total_score')
+            party_lga_score = sum(
+                map(lambda x: int(x), party_lga_polling_units_results.values_list('party_score', flat=True))
+            )
             party_result = {
                 'party_abbreviation': party.partyid,
-                'party_score': party_lga_score or 0
+                'party_score': party_lga_score
             }
             results.append(party_result)
         
@@ -199,7 +210,7 @@ class StorePartyResultsView(ResultsView):
             return JsonResponse(
                 data={
                     'status': 'error',
-                    'detail': 'Party does not exist'
+                    'detail': f"Party with id '{party_id}' does not exist"
                 },
                 status=400
             )
@@ -212,7 +223,7 @@ class StorePartyResultsView(ResultsView):
             return JsonResponse(
                 data={
                     'status': 'error',
-                    'detail': 'Party result for this polling unit already exists'
+                    'detail': f'Result for {party.partyname} party in this polling unit already exists'
                 },
                 status=400
             )
@@ -220,7 +231,8 @@ class StorePartyResultsView(ResultsView):
         AnnouncedPuResults.objects.create(
             polling_unit_uniqueid=polling_unit.uniqueid,
             party_abbreviation=party.partyid,
-            party_score=party_score
+            party_score=party_score,
+            entered_by_user='bincom',
         )
 
         return JsonResponse(
