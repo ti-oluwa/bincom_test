@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'styles/results.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<main class="container">
+    <section id="main-header">
+        <h1>Bincom Test</h1>
+        <p>
+            Check 
+            {% block result_type %}
+            {% endblock result_type %}
+             Results
+        </p>
+    </section>
+
+    <section id="main-body">
+        <div id="form-wrapper">
+            <div class="wrapper-header">
+                <h3>Please select the fields as required</h3>
+                <p>Fields marked with <span class="required">*</span> are required</p>
+            </div>
+
+            <form id="result-form" action="{{ request.url }}" method="POST">
+                {% block form_fields %}
+                {% endblock form_fields %}
+
+                {% csrf_token %}
+
+                <button type="submit" id="submit-btn" class="btn-primary">Fetch Results</button>
+            </form>
+        </div>
+
+        <div id="result-wrapper">
+            <div class="wrapper-header">
+                <h3>Results - <span id="result-count">0</span></h3>
+                <p>Results will be displayed here</p>
+            </div>
+
+            <table id="result-table">
+                <thead id="table-header">
+                    <tr>
+                        <th>Party</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+
+                <tbody id="table-body">
+                    <tr id="no-results">
+                        <td>No results yet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'scripts/results.js' %}"></script>
+{% endblock scripts %}
+

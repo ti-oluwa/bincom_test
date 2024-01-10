@@ -1,0 +1,54 @@
+{% extends 'results/results.html' %}
+{% load static %}
+
+
+{% block title %}
+Polling Unit Results
+{% endblock title %}
+
+
+{% block result_type %}
+Polling Unit
+{% endblock result_type %}
+
+
+{% block form_fields %}
+<div class="form-field">
+    <label for="state"><span class="required">*</span>State</label>
+    <select name="state" id="state" required>
+        <option value="">Select State</option>
+        {% for state in states %}
+        <option value="{{ state.pk }}">{{ state.state_name }}</option>
+        {% endfor %}
+    </select>
+
+    <span class="help-text">Select the state you want to check the result for</span>
+</div>
+
+<div class="form-field">
+    <label for="lga"><span class="required">*</span>LGA</label>
+    <select name="lga" id="lga" required disabled>
+        <option value="">Select LGA</option>
+    </select>
+
+    <span class="help-text">Select an LGA in the state you selected</span>
+</div>
+
+<div class="form-field">
+    <label for="ward"><span class="required">*</span>Ward</label>
+    <select name="ward" id="ward" required disabled>
+        <option value="">Select Ward</option>
+    </select>
+
+    <span class="help-text">Select a ward in the LGA you selected</span>
+</div>
+
+<div class="form-field">
+    <label for="polling-unit"><span class="required">*</span>Polling Unit</label>
+    <select name="polling-unit" id="polling-unit" required disabled>
+        <option value="">Select Polling Unit</option>
+    </select>
+
+    <span class="help-text">Select a polling unit in the ward selected above</span>
+</div>
+{% endblock form_fields %}

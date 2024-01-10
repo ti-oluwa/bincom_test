@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, inihetial-scale=1.0">
+    <title>Bincom Test | {% block title %}{% endblock title %}</title>
+
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    {% block styles %}
+    {% endblock styles %}
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div id="logo">
+                <a href="">Bincom Test</a>
+            </div>
+
+            <div id="nav-links">
+                <ul>
+                    <li><a href="">Unit Results</a></li>
+                    <li><a href="">LGA Results</a></li>
+                    <li><a href="">Add Party Result</a></li>
+                </ul>
+            </div>
+
+            <div id="dropdown-btn">
+                <div id="bar1"></div>
+                <div id="bar2"></div>
+            </div>
+        </nav>
+
+        <div id="dropdown-nav">
+            <ul>
+                <li><a href="">Unit Results</a></li>
+                <li><a href="">LGA Results</a></li>
+                <li><a href="">Add Party Result</a></li>
+            </ul>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock content %}
+</body>
+
+<script src="{% static 'scripts/base.js' %}"></script>
+{% block scripts %}
+{% endblock scripts %}
+
+</html>
