@@ -182,11 +182,11 @@ class StorePartyResultsView(ResultsView):
     def post(self, request, *args, **kwargs):
         """Handle POST request"""
         data: dict = json.loads(request.body.decode())
-        polling_unit_uniqueid = data.get('polling-unit')
+        polling_unit_id = data.get('polling-unit')
         party_id = data.get('party')
         party_score = data.get('party-score')
 
-        if not (polling_unit_uniqueid and party_id and party_score):
+        if not (polling_unit_id and party_id and party_score):
             return JsonResponse(
                 data={
                     'status': 'error',
@@ -195,14 +195,14 @@ class StorePartyResultsView(ResultsView):
                 status=400
             )
         
-        polling_unit = PollingUnit.objects.filter(pk=polling_unit_uniqueid).first()
+        polling_unit = PollingUnit.objects.filter(polling_unit_id=polling_unit_id).first()
         if not polling_unit:
             return JsonResponse(
                 data={
                     'status': 'error',
                     'detail': 'Polling unit does not exist'
                 },
-                status=400
+                status=404
             )
         
         party = Party.objects.filter(pk=party_id).first()
@@ -212,7 +212,7 @@ class StorePartyResultsView(ResultsView):
                     'status': 'error',
                     'detail': f"Party with id '{party_id}' does not exist"
                 },
-                status=400
+                status=404
             )
         
         already_stored = AnnouncedPuResults.objects.filter(

@@ -17,7 +17,7 @@ function updateSelectFieldOptionsWithResponseData(nextField, data){
         const option = document.createElement('option');
 
         option.innerHTML = result[`${nextField.name.replace('-', '_')}_name`]
-        option.value = result.pk;
+        option.value = result[`${nextField.name.replace('-', '_')}_id`];
 
         nextField.appendChild(option);
         nextField.disabled = false
@@ -142,7 +142,7 @@ addForm.addEventListener('submit', (event) => {
                 alert(data.detail)
             });
             addFormNumberField.value = '';
-            
+
         } else {
             response.json().then((data) => {
                 alert(data.detail)

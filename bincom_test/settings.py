@@ -16,7 +16,7 @@ SECRET_KEY = 'ewrtyguiojwretdfyguioj345678984354678hgrhbfjg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bincomdanielafolayan.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
