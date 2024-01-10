@@ -4,7 +4,7 @@ from django.db import models
 
 class Party(models.Model):
     """Model to represent political parties"""
-    id = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    id = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
     partyid = models.CharField(max_length=50)
     partyname = models.CharField(max_length=50)
 
@@ -21,7 +21,7 @@ class Party(models.Model):
 
 class Agentname(models.Model):
     """Model to represent polling unit agents"""
-    name_id = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    name_id = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
     email = models.EmailField(null=True, default=None)

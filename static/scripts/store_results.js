@@ -69,6 +69,9 @@ function fetchAndUpdateNextSelectFieldOptions(field) {
                 updateSelectFieldOptionsWithResponseData(nextField, data.data.results);
             });
         }else{
+            response.json().then((data) => {
+                alert(data.detail);
+            });
             throw new Error('Something went wrong');
         };
     });

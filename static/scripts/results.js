@@ -7,7 +7,11 @@ const resultFormSelectFields = resultForm.querySelectorAll('select');
 
 // DIVISION FETCHING 
 
-
+/**
+ * Updates the options of a select field with the response data
+ * @param {HTMLSelectElement} nextField 
+ * @param {Array} data  The response data
+ */
 function updateSelectFieldOptionsWithResponseData(nextField, data){
     nextField.querySelectorAll('option').forEach(option => {
         if (option.value){
@@ -156,6 +160,9 @@ resultForm.addEventListener('submit', (event) => {
                 updateResultTableWithResponseData(data.data.results);
             });
         } else {
+            response.json().then((data) => {
+                alert(data.detail);
+            });
             throw new Error('Something went wrong');
         }
     });

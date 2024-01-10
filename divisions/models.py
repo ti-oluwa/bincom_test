@@ -3,7 +3,7 @@ from django.db import models
 
 class States(models.Model):
     """Model to represent state electoral divisions"""
-    state_id = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    state_id = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
     state_name = models.CharField(max_length=50, unique=True)
 
     class Meta:
@@ -19,7 +19,7 @@ class States(models.Model):
 
 class LGA(models.Model):
     """Model to represent local government electoral divisions"""
-    uniqueid = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    uniqueid = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
     lga_id = models.CharField(max_length=50, unique=True)
     lga_name = models.CharField(max_length=50)
     state_id = models.CharField(max_length=50)
@@ -40,7 +40,7 @@ class LGA(models.Model):
 
 class Ward(models.Model):
     """Model to represent ward electoral divisions"""
-    uniqueid = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    uniqueid = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
     ward_id = models.CharField(max_length=50, unique=True)
     ward_name = models.CharField(max_length=50)
     lga_id = models.CharField(max_length=50)
@@ -62,7 +62,7 @@ class Ward(models.Model):
 
 class PollingUnit(models.Model):
     """Model to represent polling units"""
-    uniqueid = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    uniqueid = models.CharField(max_length=50, primary_key=True, unique=True, editable=False)
     polling_unit_id = models.CharField(max_length=50, unique=True)
     ward_id = models.CharField(max_length=50)
     lga_id = models.CharField(max_length=50, blank=True)

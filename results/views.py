@@ -204,6 +204,19 @@ class StorePartyResultsView(ResultsView):
                 status=400
             )
         
+        already_stored = AnnouncedPuResults.objects.filter(
+            polling_unit_uniqueid=polling_unit.uniqueid,
+            party_abbreviation=party.partyid
+        ).exists()
+        if already_stored:
+            return JsonResponse(
+                data={
+                    'status': 'error',
+                    'detail': 'Party result for this polling unit already exists'
+                },
+                status=400
+            )
+
         AnnouncedPuResults.objects.create(
             polling_unit_uniqueid=polling_unit.uniqueid,
             party_abbreviation=party.partyid,
@@ -213,7 +226,7 @@ class StorePartyResultsView(ResultsView):
         return JsonResponse(
             data={
                 'status': 'success',
-                'detail': 'Party results stored successfully'
+                'detail': 'Party results added successfully'
             },
             status=200
         )
